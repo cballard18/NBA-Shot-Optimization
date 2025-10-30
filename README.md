@@ -12,8 +12,11 @@ To attempt to quantify this, I created a win probability model from scratch usin
 After completing the model, I found the mean win probability for the home team given time and score (and assuming the spread was 0) and visualized the results. Additionally, I refined this to only include the last 2 minutes and scores within 9 points in either direction. These can be seen below:
 
 <p align="center">
-  <img src="plots/wp_heatmap_full.png" width="45%" />
-  <img src="plots/wp_heatmap_clutch.png" width="45%" />
+  <img src="plots/wp_heatmap_full.png" width="80%" />
+</p>
+
+<p align="center">
+  <img src="plots/wp_heatmap_clutch.png" width="80%" />
 </p>
 
 After this, I used the same play-by-play data to find the league average values for 3 and 2 point percentage, as well as rebound rates given both types of shots. Finally, using this data I calculated the change in expected winning percentage given what type of shot the home team attempted (be that a 3 or 2). To make the results more interpretable, I used a threshold of + or - 1% in eWP to decide whether a team should shoot a 3 or 2 given time and score (again, assuming a 0 point pregame spread). These results can be seen below:
