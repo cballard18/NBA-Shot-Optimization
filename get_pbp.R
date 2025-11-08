@@ -68,11 +68,20 @@ clean_df <- df %>%
     pos_team = case_when(
       home_team_action == 1 & foul == 1 ~ away_team_id,
       home_team_action == 0 & foul == 1 ~ home_team_id,
+      type_text %in% c("End Period", "Substitution", "End Game", "Official Time Out", "Full Timeout") ~ NA,
       TRUE ~ action_team
     ),
-    home_team_pos = as.integer(pos_team == home_team_id),
+    clean_pos_team = pos_team, #temp column to complete w fill later
     .by = game_id
-  )
+  ) |>
+  group_by(game_id) |>
+  fill(clean_pos_team, .direction = "up") |>
+  mutate(
+    lead_pos = lead(clean_pos_team), 
+    end_pos = case_when(clean_pos_team == lead_pos ~ 0, TRUE ~ 1), 
+    home_team_pos = as.integer(clean_pos_team == home_team_id),
+  ) |>
+  ungroup()
 
 rm(df, seasons)
 gc()

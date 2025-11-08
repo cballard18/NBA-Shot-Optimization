@@ -5,24 +5,17 @@ df <- read_parquet("datasets/clean_pbp.parquet")
 
 #league average shooting splits
 shots <- df |>
-  filter(shooting_play == TRUE) |>
-  mutate(
-    fg3a = ifelse(grepl("three", text, ignore.case = TRUE), 1, 0),
-    fg3m = ifelse(fg3a == 1 & scoring_play == TRUE, 1, 0),
-    fta = ifelse(grepl("free throw", text, ignore.case = TRUE), 1, 0),
-    ftam = ifelse(fta == 1 & scoring_play == TRUE, 1, 0),
-    fg2a = ifelse(shooting_play == TRUE & fg3a == 0 & fta == 0, 1, 0),
-    fg2m = ifelse(fg2a == 1 & scoring_play == TRUE, 1, 0)
-  )
+  filter(shooting_play == TRUE)
+
 shots |>
   summarise(
     fg3p = mean(fg3m[fg3a == 1]),
     fg2p = mean(fg2m[fg2a == 1]),
     ftp = mean(ftam[fta == 1])
   )
-fg3_mean = 0.358
-fg2_mean = 0.517
-ft_mean = 0.773
+fg3_mean <- 0.358
+fg2_mean <- 0.517
+ft_mean <- 0.773
 
 #reb chances
 rebs <- df |>
@@ -57,8 +50,8 @@ rebs |>
     fg3_oreb = mean(lead_oreb[fg3a == 1 & fg3m == 0])
   )
 
-fg3_dreb_pct = 0.754
-fg3_oreb_pct = 0.243
+fg3_dreb_pct <- 0.754
+fg3_oreb_pct <- 0.243
 
 rebs |>
   ungroup() |>
@@ -68,5 +61,14 @@ rebs |>
   )
 
 #doesnt quite add to 1 due to data errors
-fg2_dreb_pct = 0.684
-fg2_oreb_pct = 0.303
+fg2_dreb_pct <- 0.684
+fg2_oreb_pct <- 0.303
+
+#sourcing foul rate from pbp stats 
+# (https://www.pbpstats.com/totals/nba/team?Season=2024-25,2023-24,2022-23,2021-22,2020-21,2019-20,2018-19,2017-18,2016-17,2015-16&SeasonType=Regular%2BSeason&StartType=All&GroupBy=Season)
+
+sfd_2 <- .1492
+sfd_3 <- .0135
+
+ft_oreb <- .1149
+ft_dreb <- .8851
